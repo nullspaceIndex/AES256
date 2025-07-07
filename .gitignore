@@ -1,5 +1,7 @@
 # Prerequisites
 *.d
+resources/examples
+build/
 
 # Object files
 *.o
