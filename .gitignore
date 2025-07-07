@@ -1,7 +1,10 @@
-# Prerequisites
-*.d
 resources/examples
 build/
+.vscode
+
+# Prerequisites
+*.d
+
 
 # Object files
 *.o
