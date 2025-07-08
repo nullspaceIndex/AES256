@@ -1,6 +1,7 @@
 resources/examples
 build/
 .vscode
+lib/raylib/*.a
 
 # Prerequisites
 *.d
