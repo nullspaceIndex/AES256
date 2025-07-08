@@ -3,7 +3,7 @@ project(AES256)
 add_compile_options( -v)
 #-fsanitize=address source/clay_renderer_raylib.c -Wall -Wextra
 set(CMAKE_C_STANDARD 99)           
-set(CMAKE_OSX_ARCHITECTURES "x86_64")
+#set(CMAKE_OSX_ARCHITECTURES "x86_64")
 
 
 #Raylib

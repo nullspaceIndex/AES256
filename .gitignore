@@ -1,4 +1,5 @@
 resources/examples
+resources/fonts
 build/
 .vscode
 lib/raylib/*.a
