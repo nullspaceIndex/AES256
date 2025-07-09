@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)  
 project(AES256)
-add_compile_options( -v)
+add_compile_options(-O3 -Wextra -v)
 #-fsanitize=address source/clay_renderer_raylib.c -Wall -Wextra
 set(CMAKE_C_STANDARD 99)           
 #set(CMAKE_OSX_ARCHITECTURES "x86_64")
