@@ -76,21 +76,21 @@ int main (void){
             .id = CLAY_ID("Title"),
             .layout = {
             .childAlignment = { .x = CLAY_ALIGN_X_CENTER, .y = CLAY_ALIGN_Y_TOP },
-            .sizing = { .width = CLAY_SIZING_GROW(0), .height = CLAY_SIZING_FIXED(70) }, 
+            .sizing = { .width = CLAY_SIZING_GROW(0), .height = CLAY_SIZING_FIXED(40) }, 
             .padding = CLAY_PADDING_ALL(16), 
             .childGap = 16 },
                 
             .cornerRadius = CLAY_CORNER_RADIUS(10),
             .backgroundColor = WHITE_C
         }){
-            CLAY_TEXT(CLAY_STRING("AES256-Encryption"), CLAY_TEXT_CONFIG({ .fontSize = 24, .textColor = RED_C}));
+            CLAY_TEXT(CLAY_STRING("AES256-Encryption"), CLAY_TEXT_CONFIG({ .fontSize = 24, .textColor = BLACK_C}));
             CLAY({
                 .id = CLAY_ID("Header"),
                 .layout = {
                 .sizing = {CLAY_SIZING_GROW()},  
                 },
                 }){}
-            CLAY_TEXT(CLAY_STRING("Version 1.0"), CLAY_TEXT_CONFIG({ .fontSize = 24, .textColor = RED_C}));
+            CLAY_TEXT(CLAY_STRING("Version 1.0"), CLAY_TEXT_CONFIG({ .fontSize = 24, .textColor = BLACK_C}));
         }
         
         CLAY({
@@ -104,6 +104,7 @@ int main (void){
                 .border = (Clay_BorderElementConfig) {.color = BLACK_C, .width = DEF_BORDER },
                 .backgroundColor = RED_C
             }) {
+                CLAY_TEXT(CLAY_STRING("Header"), CLAY_TEXT_CONFIG({ .fontSize = 24, .textColor = BLACK_C}));
                 CLAY({
                     .id = CLAY_ID("EncryptButton"),
 
@@ -126,7 +127,9 @@ int main (void){
             .cornerRadius = CLAY_CORNER_RADIUS(10),
             .border = (Clay_BorderElementConfig) {.color = BLACK_C, .width = DEF_BORDER },
             .backgroundColor = GREEN_C
-        }){}
+        }){
+            CLAY_TEXT(CLAY_STRING("Password"), CLAY_TEXT_CONFIG({ .fontSize = 24, .textColor = BLACK_C}));
+        }
         
         CLAY({
             .id = CLAY_ID("InputField"),
@@ -138,7 +141,9 @@ int main (void){
             .cornerRadius = CLAY_CORNER_RADIUS(10),
             .border = (Clay_BorderElementConfig) {.color = BLACK_C, .width = DEF_BORDER },
             .backgroundColor = GREEN_C
-        }){}
+        }){
+            CLAY_TEXT(CLAY_STRING("InputField"), CLAY_TEXT_CONFIG({ .fontSize = 24, .textColor = BLACK_C}));
+        }
         CLAY({
             .id = CLAY_ID("EncryptedText"),
             .layout = {
@@ -149,7 +154,9 @@ int main (void){
             .cornerRadius = CLAY_CORNER_RADIUS(10),
             .border = (Clay_BorderElementConfig) {.color = BLACK_C, .width = DEF_BORDER },
             .backgroundColor = WHITE_C
-        }){}
+        }){
+            CLAY_TEXT(CLAY_STRING("EncryptedText"), CLAY_TEXT_CONFIG({ .fontSize = 24, .textColor = BLACK_C}));
+        }
     }
 
 
@@ -177,5 +184,19 @@ return 0;
 
 
 void calculateAES256(){
+    const char* plainText = "Thisisgud16byte";
+    const char* keyString = "thisisbestpasswordofworld";
+    uint8_t key[32], input[16], output[16];
 
+    padPassword(keyString, key);
+    memcpy(input, plainText, 16);
+
+    AES256_encrypt(input, key, output);
+
+    printf("Encrypted: ");
+    for (int i = 0; i < 16; i++) {
+        printf("%02X ", output[i]);
+    }
+    printf("\n");
+    
 }

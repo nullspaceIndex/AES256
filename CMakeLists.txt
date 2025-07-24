@@ -11,7 +11,7 @@ add_library(raylib STATIC lib/raylib/clay_renderer_raylib.c)
 
 
 
-add_executable(AES256 src/main.c )
+add_executable(AES256 src/main.c src/AES.c)
 
 #src/multi-compilation-unit.c
 

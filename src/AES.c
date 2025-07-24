@@ -17,6 +17,7 @@ Schlussrunde:
 
 */
 #include <inttypes.h>
+#include <string.h>
 
 const uint8_t sbox[256] = {
     // 0     1    2    3    4    5    6    7    8    9    A    B    C    D    E    F
@@ -83,11 +84,29 @@ Matrix4x4 ShiftRows(Matrix4x4 state) {
     return result;
 }
 
-Matrix4x4 init_Matrix(){
-
+Matrix4x4 init_Matrix(uint8_t *input) {
+    Matrix4x4 state;
+    for (int i = 0; i < 16; i++) {
+        state.data[i % 4][i / 4] = input[i];
+    }
+    return state;
 }
 
-
+Matrix4x4 MixColumns(Matrix4x4 state) {
+    Matrix4x4 result;
+    for (int col = 0; col < 4; col++) {
+        uint8_t a[4], b[4];
+        for (int i = 0; i < 4; i++) {
+            a[i] = state.data[col][i];
+            b[i] = (a[i] << 1) ^ ((a[i] & 0x80) ? 0x1B : 0x00);
+        }
+        result.data[col][0] = b[0] ^ a[1] ^ b[1] ^ a[2] ^ a[3];
+        result.data[col][1] = a[0] ^ b[1] ^ a[2] ^ b[2] ^ a[3];
+        result.data[col][2] = a[0] ^ a[1] ^ b[2] ^ a[3] ^ b[3];
+        result.data[col][3] = a[0] ^ b[0] ^ a[1] ^ a[2] ^ b[3];
+    }
+    return result;
+}
 
 
 void padPassword(const char* password, uint8_t key[32]) {
@@ -100,6 +119,32 @@ void padPassword(const char* password, uint8_t key[32]) {
         }
     }
 }
+
+void AES256_encrypt(uint8_t *input, uint8_t *key, uint8_t *output) {
+    Matrix4x4 state = init_Matrix(input);
+    Matrix4x4 roundKeys[15];
+
+    for (int i = 0; i < 14; i++) {
+        roundKeys[i] = init_Matrix(&key[(i % 8) * 4]);
+    }
+
+    state = AddRoundKey(state, roundKeys[0]);
+
+    for (int round = 1; round < 14; round++) {
+        state = SubBytes(state);
+        state = ShiftRows(state);
+        if (round != 14)
+            state = MixColumns(state);
+        state = AddRoundKey(state, roundKeys[round]);
+    }
+
+    for (int i = 0; i < 16; i++) {
+        output[i] = state.data[i % 4][i / 4];
+    }
+}
+
+
+
 
 
 static const uint8_t inv_sbox[256] = {
