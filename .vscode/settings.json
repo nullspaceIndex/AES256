@@ -2,6 +2,7 @@
     "git.enabled": false,
     "files.associations": {
         "stdint.h": "c",
-        "raylib.h": "c"
+        "raylib.h": "c",
+        "ios": "c"
     }
 }
