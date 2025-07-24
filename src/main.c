@@ -10,21 +10,35 @@
 #define GREY_C (Clay_Color){100, 93, 105, 255}
 #define WHITE_C (Clay_Color){255, 255, 255, 255}
 #define RED_C (Clay_Color){255, 0, 0, 255}
+#define BLACK_C (Clay_Color){0, 0, 0, 255}
+#define DEF_BORDER {.left = 4, .right = 4, .top = 4, .bottom = 4}
 
 int main (void){
-    const Font defaultFont = GetFontDefault();
-    SetTargetFPS(60);
-
-
+    
 
     Clay_Raylib_Initialize(1024, 768, "Test",FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT);
+
+    Font fonts[0];
+    
+    fonts[0] = LoadFontEx("../resources/fonts/monofonto rg.otf", 24, 0, 224);
+    SetTextureFilter(fonts[1].texture, TEXTURE_FILTER_BILINEAR);
+
     u_int64_t clayRequiredMemory = Clay_MinMemorySize();
     Clay_Arena clayArena = Clay_CreateArenaWithCapacityAndMemory(clayRequiredMemory, malloc(clayRequiredMemory));
     
 
     Clay_Initialize(clayArena, (Clay_Dimensions){1024,768}, (Clay_ErrorHandler){Clay__ErrorHandlerFunctionDefault, .userData = NULL});
     
+
+
+    Clay_SetMeasureTextFunction(Raylib_MeasureText, fonts);
     int i = 0;
+
+
+
+
+
+
     while(!WindowShouldClose()){
     Clay_SetLayoutDimensions((Clay_Dimensions) {GetScreenHeight(), GetScreenWidth()});
     if(i > 60){
@@ -69,7 +83,15 @@ int main (void){
             .cornerRadius = CLAY_CORNER_RADIUS(10),
             .backgroundColor = WHITE_C
         }){
-            CLAY_TEXT(CLAY_STRING("Clay - UI Library"), CLAY_TEXT_CONFIG({ .fontSize = 24, .textColor = RED_C}));}
+            CLAY_TEXT(CLAY_STRING("AES256-Encryption"), CLAY_TEXT_CONFIG({ .fontSize = 24, .textColor = RED_C}));
+            CLAY({
+                .id = CLAY_ID("Header"),
+                .layout = {
+                .sizing = {CLAY_SIZING_GROW()},  
+                },
+                }){}
+            CLAY_TEXT(CLAY_STRING("Version 1.0"), CLAY_TEXT_CONFIG({ .fontSize = 24, .textColor = RED_C}));
+        }
         
         CLAY({
                 .id = CLAY_ID("Header"),
@@ -79,6 +101,7 @@ int main (void){
                 .childGap = 16 },
                 
                 .cornerRadius = CLAY_CORNER_RADIUS(10),
+                .border = (Clay_BorderElementConfig) {.color = BLACK_C, .width = DEF_BORDER },
                 .backgroundColor = RED_C
             }) {
                 CLAY({
@@ -101,6 +124,7 @@ int main (void){
             .childGap = 16 },
                 
             .cornerRadius = CLAY_CORNER_RADIUS(10),
+            .border = (Clay_BorderElementConfig) {.color = BLACK_C, .width = DEF_BORDER },
             .backgroundColor = GREEN_C
         }){}
         
@@ -112,6 +136,7 @@ int main (void){
             .childGap = 16 },
                 
             .cornerRadius = CLAY_CORNER_RADIUS(10),
+            .border = (Clay_BorderElementConfig) {.color = BLACK_C, .width = DEF_BORDER },
             .backgroundColor = GREEN_C
         }){}
         CLAY({
@@ -122,6 +147,7 @@ int main (void){
             .childGap = 16 },
                 
             .cornerRadius = CLAY_CORNER_RADIUS(10),
+            .border = (Clay_BorderElementConfig) {.color = BLACK_C, .width = DEF_BORDER },
             .backgroundColor = WHITE_C
         }){}
     }
@@ -134,7 +160,7 @@ int main (void){
     
     BeginDrawing();
     ClearBackground(BLACK);
-    Clay_Raylib_Render(clay_RenderCommands, (Font *) &defaultFont);
+    Clay_Raylib_Render(clay_RenderCommands, (Font *) fonts);
 
     
     EndDrawing();
