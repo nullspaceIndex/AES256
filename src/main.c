@@ -3,6 +3,7 @@
 #include "clay.h"
 #include "raylib.h"
 #include "clay_renderer_raylib.c"
+#include "AES.h"
 //#include <stdio.h>
 #define BLUE {50, 76, 168,255}
 #define GREEN {62, 168, 50,255}
@@ -60,7 +61,7 @@ int main (void){
         
         CLAY({
             .id = CLAY_ID("InputField"),
-            .layout = {.sizing = {CLAY_SIZING_FIT(0), CLAY_SIZING_PERCENT(10)}, },
+            .layout = {.sizing = {CLAY_SIZING_FIT(0), CLAY_SIZING_PERCENT(10)}, CLAY_BORDER_ALL(10)},
             .backgroundColor = WHITE
         }){}
         CLAY({
@@ -86,9 +87,14 @@ int main (void){
     
 
 };
+
+
 Clay_Raylib_Close();
 
-return 0;
+return 0;    
+}
 
-    
+
+void calculateAES256(){
+
 }
